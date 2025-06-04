@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -104,20 +103,17 @@ const Index = () => {
     {
       name: "Patrick Silva",
       role: "Coordenador de TI",
-      content: "A Gpowerhub transformou completamente nossa operação com soluções de IA.",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=entropy&auto=format"
+      content: "A Gpowerhub transformou completamente nossa operação com soluções de IA."
     },
     {
       name: "Fabio Junger",
       role: "CEO, Grupo EMEC",
-      content: "A análise de dados fornecida pela equipe nos ajudou a tomar decisões cruciais.",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=entropy&auto=format"
+      content: "A análise de dados fornecida pela equipe nos ajudou a tomar decisões cruciais."
     },
     {
       name: "Jose Augusto",
       role: "Diretor, InnovaTech",
-      content: "Excelente suporte e soluções verdadeiramente personalizadas para nosso negócio.",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=entropy&auto=format"
+      content: "Excelente suporte e soluções verdadeiramente personalizadas para nosso negócio."
     }
   ];
 
@@ -152,6 +148,7 @@ const Index = () => {
               <button onClick={() => scrollToSection("depoimentos")} className="text-gray-600 hover:text-blue-600 transition-colors">Depoimentos</button>
               <button onClick={() => scrollToSection("blog")} className="text-gray-600 hover:text-blue-600 transition-colors">Blog</button>
               <button onClick={() => scrollToSection("contato")} className="text-gray-600 hover:text-blue-600 transition-colors">Contato</button>
+              <a href="/admin" className="text-gray-600 hover:text-blue-600 transition-colors">Admin</a>
             </div>
             <Button onClick={() => scrollToSection("contato")} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
               Fale Conosco
@@ -256,12 +253,9 @@ const Index = () => {
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4" />
-                    <div>
-                      <div className="font-semibold">{testimonial.name}</div>
-                      <div className="text-sm text-gray-600">{testimonial.role}</div>
-                    </div>
+                  <div className="mb-4">
+                    <div className="font-semibold text-lg">{testimonial.name}</div>
+                    <div className="text-sm text-gray-600">{testimonial.role}</div>
                   </div>
                   <p className="text-gray-600 italic">"{testimonial.content}"</p>
                 </CardContent>
