@@ -33,7 +33,10 @@ export const useBlogPosts = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setPosts(data || []);
+      
+      // Type assertion to ensure proper typing
+      const typedPosts = (data || []) as BlogPost[];
+      setPosts(typedPosts);
     } catch (error) {
       console.error('Error fetching posts:', error);
       toast({
@@ -52,35 +55,49 @@ export const useBlogPosts = () => {
 
   const createPost = async (postData: Partial<BlogPost>) => {
     try {
+      if (!postData.title || !postData.content) {
+        throw new Error('Título e conteúdo são obrigatórios');
+      }
+
       const slug = postData.title
-        ?.toLowerCase()
+        .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .replace(/[^a-z0-9\s-]/g, "")
         .replace(/\s+/g, "-")
         .replace(/-+/g, "-")
-        .trim() || '';
+        .trim();
+
+      const insertData = {
+        title: postData.title,
+        content: postData.content,
+        slug,
+        author: postData.author || 'Admin',
+        excerpt: postData.excerpt || null,
+        image_url: postData.image_url || null,
+        tags: postData.tags || [],
+        meta_title: postData.meta_title || postData.title,
+        meta_description: postData.meta_description || postData.excerpt || null,
+        keywords: postData.keywords || null,
+        status: postData.status || 'draft'
+      };
 
       const { data, error } = await supabase
         .from('blog_posts')
-        .insert([{
-          ...postData,
-          slug,
-          meta_title: postData.meta_title || postData.title,
-          meta_description: postData.meta_description || postData.excerpt,
-        }])
+        .insert([insertData])
         .select()
         .single();
 
       if (error) throw error;
 
-      setPosts(prev => [data, ...prev]);
+      const typedPost = data as BlogPost;
+      setPosts(prev => [typedPost, ...prev]);
       toast({
         title: "Post criado",
         description: "O post foi criado com sucesso.",
       });
       
-      return data;
+      return typedPost;
     } catch (error) {
       console.error('Error creating post:', error);
       toast({
@@ -103,13 +120,14 @@ export const useBlogPosts = () => {
 
       if (error) throw error;
 
-      setPosts(prev => prev.map(post => post.id === id ? data : post));
+      const typedPost = data as BlogPost;
+      setPosts(prev => prev.map(post => post.id === id ? typedPost : post));
       toast({
         title: "Post atualizado",
         description: "O post foi atualizado com sucesso.",
       });
       
-      return data;
+      return typedPost;
     } catch (error) {
       console.error('Error updating post:', error);
       toast({
