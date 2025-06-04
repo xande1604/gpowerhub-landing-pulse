@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -131,7 +132,6 @@ const Index = () => {
               <button onClick={() => scrollToSection("depoimentos")} className="text-gray-600 hover:text-blue-600 transition-colors">Depoimentos</button>
               <button onClick={() => scrollToSection("blog")} className="text-gray-600 hover:text-blue-600 transition-colors">Blog</button>
               <button onClick={() => scrollToSection("contato")} className="text-gray-600 hover:text-blue-600 transition-colors">Contato</button>
-              <a href="/admin" className="text-gray-600 hover:text-blue-600 transition-colors">Admin</a>
             </div>
             <Button onClick={() => scrollToSection("contato")} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
               Fale Conosco
