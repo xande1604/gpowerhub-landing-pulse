@@ -7,125 +7,63 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Plus, Edit, Trash2, Eye, Calendar, User, Tag, Search, Globe } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { ArrowLeft, Plus, Edit, Trash2, Eye, Calendar, User, Tag, Search, Globe, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
-
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  date: string;
-  image: string;
-  slug: string;
-  tags: string[];
-  metaTitle?: string;
-  metaDescription?: string;
-  keywords?: string;
-  status: 'draft' | 'published';
-}
+import { useBlogPosts, BlogPost } from "@/hooks/useBlogPosts";
 
 const Admin = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([
-    {
-      id: 1,
-      title: "Como a análise de dados pode transformar sua empresa",
-      excerpt: "Descubra como utilizar dados estrategicamente para impulsionar resultados de negócios.",
-      content: "Conteúdo completo do artigo aqui...",
-      author: "Ana Oliveira",
-      date: "12 Jun 2025",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop&crop=entropy&auto=format",
-      slug: "analise-dados-transformar-empresa",
-      tags: ["análise de dados", "business intelligence", "transformação digital"],
-      metaTitle: "Como a análise de dados pode transformar sua empresa - Gpowerhub",
-      metaDescription: "Descubra estratégias de análise de dados para impulsionar resultados empresariais. Guia completo da Gpowerhub.",
-      keywords: "análise de dados, business intelligence, transformação digital, dados empresariais",
-      status: 'published'
-    }
-  ]);
-
+  const { posts, loading, createPost, updatePost, deletePost } = useBlogPosts();
+  
   const [currentPost, setCurrentPost] = useState<Partial<BlogPost>>({
     title: "",
     excerpt: "",
     content: "",
     author: "",
-    image: "",
+    image_url: "",
     tags: [],
-    metaTitle: "",
-    metaDescription: "",
+    meta_title: "",
+    meta_description: "",
     keywords: "",
     status: 'draft'
   });
 
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!currentPost.title || !currentPost.content) {
-      toast({
-        title: "Erro",
-        description: "Título e conteúdo são obrigatórios.",
-        variant: "destructive",
-      });
       return;
     }
 
-    const slug = currentPost.title
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .trim();
+    setSubmitting(true);
+    try {
+      if (editingId) {
+        await updatePost(editingId, currentPost);
+      } else {
+        await createPost(currentPost);
+      }
 
-    const newPost: BlogPost = {
-      id: editingId || Date.now(),
-      title: currentPost.title,
-      excerpt: currentPost.excerpt || "",
-      content: currentPost.content,
-      author: currentPost.author || "Admin",
-      date: new Date().toLocaleDateString('pt-BR'),
-      image: currentPost.image || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=200&fit=crop&crop=entropy&auto=format",
-      slug,
-      tags: currentPost.tags || [],
-      metaTitle: currentPost.metaTitle || currentPost.title,
-      metaDescription: currentPost.metaDescription || currentPost.excerpt,
-      keywords: currentPost.keywords || "",
-      status: currentPost.status || 'draft'
-    };
-
-    if (editingId) {
-      setPosts(posts.map(post => post.id === editingId ? newPost : post));
-      toast({
-        title: "Post atualizado",
-        description: "O post foi atualizado com sucesso.",
+      setCurrentPost({
+        title: "",
+        excerpt: "",
+        content: "",
+        author: "",
+        image_url: "",
+        tags: [],
+        meta_title: "",
+        meta_description: "",
+        keywords: "",
+        status: 'draft'
       });
-    } else {
-      setPosts([newPost, ...posts]);
-      toast({
-        title: "Post criado",
-        description: "O post foi criado com sucesso.",
-      });
+      setEditingId(null);
+    } catch (error) {
+      console.error('Error submitting post:', error);
+    } finally {
+      setSubmitting(false);
     }
-
-    setCurrentPost({
-      title: "",
-      excerpt: "",
-      content: "",
-      author: "",
-      image: "",
-      tags: [],
-      metaTitle: "",
-      metaDescription: "",
-      keywords: "",
-      status: 'draft'
-    });
-    setEditingId(null);
   };
 
   const handleEdit = (post: BlogPost) => {
@@ -133,12 +71,10 @@ const Admin = () => {
     setEditingId(post.id);
   };
 
-  const handleDelete = (id: number) => {
-    setPosts(posts.filter(post => post.id !== id));
-    toast({
-      title: "Post excluído",
-      description: "O post foi excluído com sucesso.",
-    });
+  const handleDelete = async (id: string) => {
+    if (window.confirm('Tem certeza que deseja excluir este post?')) {
+      await deletePost(id);
+    }
   };
 
   const handleTagsChange = (value: string) => {
@@ -149,8 +85,23 @@ const Admin = () => {
   const filteredPosts = posts.filter(post =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+    (post.tags && post.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())))
   );
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('pt-BR');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <Loader2 className="w-6 h-6 animate-spin" />
+          <span>Carregando...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -211,7 +162,7 @@ const Admin = () => {
                         <div className="flex items-center text-sm text-gray-500 space-x-4">
                           <span className="flex items-center">
                             <Calendar className="w-4 h-4 mr-1" />
-                            {post.date}
+                            {formatDate(post.created_at)}
                           </span>
                           <span className="flex items-center">
                             <User className="w-4 h-4 mr-1" />
@@ -285,7 +236,7 @@ const Admin = () => {
                         <Label htmlFor="excerpt">Resumo</Label>
                         <Textarea
                           id="excerpt"
-                          value={currentPost.excerpt}
+                          value={currentPost.excerpt || ""}
                           onChange={(e) => setCurrentPost({ ...currentPost, excerpt: e.target.value })}
                           placeholder="Breve descrição do post"
                           rows={3}
@@ -328,8 +279,8 @@ const Admin = () => {
                         <Label htmlFor="image">URL da Imagem</Label>
                         <Input
                           id="image"
-                          value={currentPost.image}
-                          onChange={(e) => setCurrentPost({ ...currentPost, image: e.target.value })}
+                          value={currentPost.image_url || ""}
+                          onChange={(e) => setCurrentPost({ ...currentPost, image_url: e.target.value })}
                           placeholder="https://exemplo.com/imagem.jpg"
                         />
                       </div>
@@ -370,13 +321,13 @@ const Admin = () => {
                         <Label htmlFor="metaTitle">Meta Título</Label>
                         <Input
                           id="metaTitle"
-                          value={currentPost.metaTitle}
-                          onChange={(e) => setCurrentPost({ ...currentPost, metaTitle: e.target.value })}
+                          value={currentPost.meta_title || ""}
+                          onChange={(e) => setCurrentPost({ ...currentPost, meta_title: e.target.value })}
                           placeholder="Título otimizado para SEO (até 60 caracteres)"
                           maxLength={60}
                         />
                         <p className="text-xs text-gray-500 mt-1">
-                          {currentPost.metaTitle?.length || 0}/60 caracteres
+                          {(currentPost.meta_title?.length || 0)}/60 caracteres
                         </p>
                       </div>
 
@@ -384,14 +335,14 @@ const Admin = () => {
                         <Label htmlFor="metaDescription">Meta Descrição</Label>
                         <Textarea
                           id="metaDescription"
-                          value={currentPost.metaDescription}
-                          onChange={(e) => setCurrentPost({ ...currentPost, metaDescription: e.target.value })}
+                          value={currentPost.meta_description || ""}
+                          onChange={(e) => setCurrentPost({ ...currentPost, meta_description: e.target.value })}
                           placeholder="Descrição para os resultados de busca (até 160 caracteres)"
                           rows={3}
                           maxLength={160}
                         />
                         <p className="text-xs text-gray-500 mt-1">
-                          {currentPost.metaDescription?.length || 0}/160 caracteres
+                          {(currentPost.meta_description?.length || 0)}/160 caracteres
                         </p>
                       </div>
 
@@ -399,7 +350,7 @@ const Admin = () => {
                         <Label htmlFor="keywords">Palavras-chave</Label>
                         <Input
                           id="keywords"
-                          value={currentPost.keywords}
+                          value={currentPost.keywords || ""}
                           onChange={(e) => setCurrentPost({ ...currentPost, keywords: e.target.value })}
                           placeholder="palavras, chave, separadas, por, vírgula"
                         />
@@ -419,10 +370,10 @@ const Admin = () => {
                       excerpt: "",
                       content: "",
                       author: "",
-                      image: "",
+                      image_url: "",
                       tags: [],
-                      metaTitle: "",
-                      metaDescription: "",
+                      meta_title: "",
+                      meta_description: "",
                       keywords: "",
                       status: 'draft'
                     });
@@ -431,8 +382,19 @@ const Admin = () => {
                 >
                   Cancelar
                 </Button>
-                <Button type="submit" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                  {editingId ? 'Atualizar Post' : 'Criar Post'}
+                <Button 
+                  type="submit" 
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  disabled={submitting}
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      {editingId ? 'Atualizando...' : 'Criando...'}
+                    </>
+                  ) : (
+                    editingId ? 'Atualizar Post' : 'Criar Post'
+                  )}
                 </Button>
               </div>
             </form>
