@@ -4,11 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight, BarChart3, Zap, Code, ArrowUpRight, Users, Mail, Phone, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
 
 const Index = () => {
   const { posts: blogPosts, loading: blogLoading } = useBlogPosts();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -111,6 +113,10 @@ const Index = () => {
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
+  };
+
+  const handlePostClick = (slug: string) => {
+    navigate(`/blog/${slug}`);
   };
 
   // Filtra apenas posts publicados para a página pública
@@ -268,7 +274,11 @@ const Index = () => {
             <>
               <div className="grid md:grid-cols-3 gap-8 mb-12">
                 {publishedPosts.map((post) => (
-                  <Card key={post.id} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
+                  <Card 
+                    key={post.id} 
+                    className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+                    onClick={() => handlePostClick(post.slug)}
+                  >
                     <div className="aspect-video overflow-hidden rounded-t-lg">
                       <img 
                         src={post.image_url || "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=200&fit=crop&crop=entropy&auto=format"} 
