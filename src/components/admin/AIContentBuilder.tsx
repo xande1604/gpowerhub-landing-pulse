@@ -11,7 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCreateCase } from "@/hooks/useCases";
 import { useCreateProduct } from "@/hooks/useProducts";
 
-const AIContentBuilder = () => {
+const AIContentBuilder = ({ onContentSaved }: { onContentSaved?: (type: string) => void }) => {
   const [contentType, setContentType] = useState("case");
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -189,6 +189,15 @@ const AIContentBuilder = () => {
                             created_by: user.id
                           });
                           toast.success("Case criado com sucesso! Veja na aba Cases.");
+                          
+                          // Invalidate queries manually to ensure refresh
+                          queryClient.invalidateQueries({ queryKey: ["admin-cases"] });
+                          queryClient.invalidateQueries({ queryKey: ["cases"] });
+                          
+                          // Notify parent to switch tab
+                          if (onContentSaved) {
+                            onContentSaved("cases");
+                          }
                         } else if (contentType === "product") {
                           await createProduct.mutateAsync({
                             name: parsedContent.name,
@@ -202,6 +211,15 @@ const AIContentBuilder = () => {
                             created_by: user.id
                           });
                           toast.success("Produto criado com sucesso! Veja na aba Produtos.");
+                          
+                          // Invalidate queries manually to ensure refresh
+                          queryClient.invalidateQueries({ queryKey: ["admin-products"] });
+                          queryClient.invalidateQueries({ queryKey: ["products"] });
+                          
+                          // Notify parent to switch tab
+                          if (onContentSaved) {
+                            onContentSaved("products");
+                          }
                         }
                         
                         setGeneratedContent("");
