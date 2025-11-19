@@ -158,6 +158,14 @@ const AIContentBuilder = () => {
                     onClick={async () => {
                       setIsSaving(true);
                       try {
+                        // Check if user is authenticated
+                        const { data: { user } } = await supabase.auth.getUser();
+                        if (!user) {
+                          toast.error("Você precisa estar autenticado para salvar conteúdo");
+                          setIsSaving(false);
+                          return;
+                        }
+
                         // Remove markdown code blocks if present
                         let cleanContent = generatedContent.trim();
                         if (cleanContent.startsWith('```json')) {
@@ -177,7 +185,8 @@ const AIContentBuilder = () => {
                             results: parsedContent.results || [],
                             tags: parsedContent.tags || [],
                             is_published: false,
-                            display_order: 0
+                            display_order: 0,
+                            created_by: user.id
                           });
                           toast.success("Case criado com sucesso! Veja na aba Cases.");
                         } else if (contentType === "product") {
@@ -189,7 +198,8 @@ const AIContentBuilder = () => {
                             tags: parsedContent.tags || [],
                             price_info: parsedContent.priceInfo || parsedContent.price_info,
                             is_published: false,
-                            display_order: 0
+                            display_order: 0,
+                            created_by: user.id
                           });
                           toast.success("Produto criado com sucesso! Veja na aba Produtos.");
                         }
