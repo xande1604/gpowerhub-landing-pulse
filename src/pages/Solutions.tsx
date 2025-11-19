@@ -108,33 +108,25 @@ const Solutions = () => {
       <section id="cases" className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Cases de Sucesso</h2>
-            <p className="text-muted-foreground text-lg">
-              Conheça os resultados que alcançamos para nossos clientes
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Conheça alguns dos nossos casos de sucesso</h2>
           </div>
 
           {casesLoading ? (
-            <div className="space-y-6">
+            <div className="space-y-20">
               {[1, 2].map((i) => (
-                <Card key={i} className="animate-pulse">
-                  <CardHeader>
-                    <div className="h-6 bg-muted rounded w-3/4 mb-2" />
-                    <div className="h-4 bg-muted rounded w-full" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-32 bg-muted rounded" />
-                  </CardContent>
-                </Card>
+                <div key={i} className="animate-pulse">
+                  <div className="h-96 bg-muted rounded" />
+                </div>
               ))}
             </div>
           ) : (
-            <div className="space-y-6">
-              {cases?.map((caseItem) => (
-                <Card key={caseItem.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="md:flex">
+            <div className="space-y-20">
+              {cases?.map((caseItem, index) => (
+                <div key={caseItem.id} className={`grid md:grid-cols-2 gap-8 items-center ${index % 2 === 0 ? '' : 'md:flex-row-reverse'}`}>
+                  {/* Image */}
+                  <div className={`${index % 2 === 0 ? 'md:order-1' : 'md:order-2'}`}>
                     {caseItem.image_url && (
-                      <div className="md:w-1/3 h-64 md:h-auto">
+                      <div className="rounded-lg overflow-hidden shadow-lg">
                         <img 
                           src={caseItem.image_url} 
                           alt={caseItem.title}
@@ -142,51 +134,59 @@ const Solutions = () => {
                         />
                       </div>
                     )}
-                    <div className="md:w-2/3">
-                      <CardHeader>
-                        <div className="flex items-center gap-4 mb-2">
-                          {caseItem.client_logo_url && (
-                            <img 
-                              src={caseItem.client_logo_url} 
-                              alt={caseItem.client_name}
-                              className="h-8"
-                            />
-                          )}
-                          <span className="text-sm text-muted-foreground">{caseItem.client_name}</span>
-                        </div>
-                        <CardTitle className="text-2xl">{caseItem.title}</CardTitle>
-                        {caseItem.subtitle && (
-                          <CardDescription className="text-base">{caseItem.subtitle}</CardDescription>
-                        )}
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <p className="text-muted-foreground">{caseItem.description}</p>
-                        
-                        {caseItem.results && Array.isArray(caseItem.results) && caseItem.results.length > 0 && (
-                          <div>
-                            <h4 className="font-semibold mb-3">Resultados:</h4>
-                            <div className="grid sm:grid-cols-2 gap-4">
-                              {caseItem.results.map((result: any, idx: number) => (
-                                <div key={idx} className="flex items-start gap-2">
-                                  <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                                  <span className="text-sm">{typeof result === 'string' ? result : result.text}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {caseItem.tags && caseItem.tags.length > 0 && (
-                          <div className="flex flex-wrap gap-2 pt-2">
-                            {caseItem.tags.map((tag, idx) => (
-                              <Badge key={idx} variant="outline">{tag}</Badge>
-                            ))}
-                          </div>
-                        )}
-                      </CardContent>
-                    </div>
                   </div>
-                </Card>
+
+                  {/* Content */}
+                  <div className={`space-y-6 ${index % 2 === 0 ? 'md:order-2' : 'md:order-1'}`}>
+                    {caseItem.client_name && (
+                      <Badge variant="secondary" className="mb-2">
+                        {caseItem.client_name}
+                      </Badge>
+                    )}
+                    
+                    <h3 className="text-2xl md:text-3xl font-bold">{caseItem.title}</h3>
+                    
+                    <p className="text-muted-foreground leading-relaxed">
+                      {caseItem.description}
+                    </p>
+
+                    {/* Results as metrics */}
+                    {caseItem.results && Array.isArray(caseItem.results) && caseItem.results.length > 0 && (
+                      <div className="grid grid-cols-3 gap-4 py-6">
+                        {caseItem.results.slice(0, 3).map((result: any, idx: number) => {
+                          const resultText = typeof result === 'string' ? result : result.text || result.value;
+                          const parts = resultText.split(' ');
+                          const value = parts[0];
+                          const label = parts.slice(1).join(' ');
+                          
+                          return (
+                            <div key={idx} className="text-center">
+                              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+                                {value}
+                              </div>
+                              <div className="text-sm text-muted-foreground">
+                                {label}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    <Button size="lg">
+                      Fale Conosco
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+
+                    {caseItem.tags && caseItem.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-2 pt-4">
+                        {caseItem.tags.map((tag, idx) => (
+                          <Badge key={idx} variant="outline">{tag}</Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
           )}
