@@ -158,7 +158,15 @@ const AIContentBuilder = () => {
                     onClick={async () => {
                       setIsSaving(true);
                       try {
-                        const parsedContent = JSON.parse(generatedContent);
+                        // Remove markdown code blocks if present
+                        let cleanContent = generatedContent.trim();
+                        if (cleanContent.startsWith('```json')) {
+                          cleanContent = cleanContent.replace(/^```json\n/, '').replace(/\n```$/, '');
+                        } else if (cleanContent.startsWith('```')) {
+                          cleanContent = cleanContent.replace(/^```\n/, '').replace(/\n```$/, '');
+                        }
+                        
+                        const parsedContent = JSON.parse(cleanContent);
                         
                         if (contentType === "case") {
                           await createCase.mutateAsync({
