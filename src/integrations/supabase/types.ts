@@ -95,6 +95,57 @@ export type Database = {
         }
         Relationships: []
       }
+      cases: {
+        Row: {
+          client_logo_url: string | null
+          client_name: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string
+          display_order: number | null
+          id: string
+          image_url: string | null
+          is_published: boolean | null
+          results: Json | null
+          subtitle: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          client_logo_url?: string | null
+          client_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          results?: Json | null
+          subtitle?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          client_logo_url?: string | null
+          client_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          results?: Json | null
+          subtitle?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       credit_key_redemptions: {
         Row: {
           credits_received: number
@@ -310,6 +361,57 @@ export type Database = {
         }
         Relationships: []
       }
+      landing_sections: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          created_by: string | null
+          cta_link: string | null
+          cta_text: string | null
+          data: Json | null
+          display_order: number | null
+          id: string
+          image_url: string | null
+          is_published: boolean | null
+          section_type: string
+          subtitle: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          cta_link?: string | null
+          cta_text?: string | null
+          data?: Json | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          section_type: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          cta_link?: string | null
+          cta_text?: string | null
+          data?: Json | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          section_type?: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       model_templates: {
         Row: {
           categories: string[] | null
@@ -466,6 +568,57 @@ export type Database = {
           stripe_payment_intent_id?: string | null
           transaction_type?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string
+          display_order: number | null
+          features: Json | null
+          id: string
+          image_url: string | null
+          is_published: boolean | null
+          name: string
+          price_info: string | null
+          short_description: string | null
+          tags: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description: string
+          display_order?: number | null
+          features?: Json | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          name: string
+          price_info?: string | null
+          short_description?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string
+          display_order?: number | null
+          features?: Json | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          name?: string
+          price_info?: string | null
+          short_description?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
         }
         Relationships: []
       }
