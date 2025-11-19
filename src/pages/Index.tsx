@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight, BarChart3, Zap, Code, ArrowUpRight, Users, Mail, Phone, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
 
@@ -137,6 +137,7 @@ const Index = () => {
               <button onClick={() => scrollToSection("cases")} className="text-gray-600 hover:text-blue-600 transition-colors">Cases</button>
               <button onClick={() => scrollToSection("depoimentos")} className="text-gray-600 hover:text-blue-600 transition-colors">Depoimentos</button>
               <button onClick={() => scrollToSection("blog")} className="text-gray-600 hover:text-blue-600 transition-colors">Blog</button>
+              <Link to="/solucoes" className="text-gray-600 hover:text-blue-600 transition-colors">Soluções</Link>
               <button onClick={() => scrollToSection("contato")} className="text-gray-600 hover:text-blue-600 transition-colors">Contato</button>
             </div>
             <Button onClick={() => scrollToSection("contato")} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
