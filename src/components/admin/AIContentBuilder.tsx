@@ -7,12 +7,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCreateCase } from "@/hooks/useCases";
+import { useCreateProduct } from "@/hooks/useProducts";
 
 const AIContentBuilder = () => {
   const [contentType, setContentType] = useState("case");
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedContent, setGeneratedContent] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  
+  const queryClient = useQueryClient();
+  const createCase = useCreateCase();
+  const createProduct = useCreateProduct();
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {
@@ -146,10 +154,57 @@ const AIContentBuilder = () => {
                   >
                     Copiar
                   </Button>
-                  <Button onClick={() => {
-                    toast.info("Use este conteúdo como base nas abas Cases ou Produtos");
-                  }}>
-                    Usar este conteúdo
+                  <Button 
+                    onClick={async () => {
+                      setIsSaving(true);
+                      try {
+                        const parsedContent = JSON.parse(generatedContent);
+                        
+                        if (contentType === "case") {
+                          await createCase.mutateAsync({
+                            title: parsedContent.title,
+                            subtitle: parsedContent.subtitle,
+                            description: parsedContent.description,
+                            client_name: parsedContent.clientName || parsedContent.client_name,
+                            results: parsedContent.results || [],
+                            tags: parsedContent.tags || [],
+                            is_published: false,
+                            display_order: 0
+                          });
+                          toast.success("Case criado com sucesso! Veja na aba Cases.");
+                        } else if (contentType === "product") {
+                          await createProduct.mutateAsync({
+                            name: parsedContent.name,
+                            short_description: parsedContent.shortDescription || parsedContent.short_description,
+                            description: parsedContent.description,
+                            features: parsedContent.features || [],
+                            tags: parsedContent.tags || [],
+                            price_info: parsedContent.priceInfo || parsedContent.price_info,
+                            is_published: false,
+                            display_order: 0
+                          });
+                          toast.success("Produto criado com sucesso! Veja na aba Produtos.");
+                        }
+                        
+                        setGeneratedContent("");
+                        setPrompt("");
+                      } catch (error: any) {
+                        console.error("Error saving content:", error);
+                        toast.error("Erro ao salvar: " + error.message);
+                      } finally {
+                        setIsSaving(false);
+                      }
+                    }}
+                    disabled={isSaving}
+                  >
+                    {isSaving ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Salvando...
+                      </>
+                    ) : (
+                      "Usar este conteúdo"
+                    )}
                   </Button>
                 </div>
               </CardContent>
