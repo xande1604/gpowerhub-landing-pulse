@@ -17,6 +17,7 @@ const AdminDashboard = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("cases");
 
   useEffect(() => {
     checkAuth();
@@ -162,7 +163,7 @@ const AdminDashboard = () => {
           </Button>
         </div>
 
-        <Tabs defaultValue="cases" className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="cases">Cases</TabsTrigger>
             <TabsTrigger value="products">Produtos</TabsTrigger>
@@ -178,7 +179,7 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="ai-builder">
-            <AIContentBuilder />
+            <AIContentBuilder onContentSaved={(type) => setActiveTab(type)} />
           </TabsContent>
         </Tabs>
       </div>
