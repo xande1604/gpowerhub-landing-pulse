@@ -1,15 +1,20 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronRight, BarChart3, Zap, Code, ArrowUpRight, Users, Mail, Phone, MapPin } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
+import { useCases } from "@/hooks/useCases";
+import { useProducts } from "@/hooks/useProducts";
+import { useLandingSections } from "@/hooks/useLandingSections";
 
 const Index = () => {
   const { posts: blogPosts, loading: blogLoading } = useBlogPosts();
+  const { data: casesData, isLoading: casesLoading } = useCases();
+  const { data: productsData, isLoading: productsLoading } = useProducts();
+  const { data: landingSections, isLoading: sectionsLoading } = useLandingSections();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -19,7 +24,8 @@ const Index = () => {
     message: ""
   });
 
-  const services = [
+  // Fallback services (usado se não houver products no banco)
+  const defaultServices = [
     {
       icon: BarChart3,
       title: "Análise de Dados",
@@ -42,43 +48,45 @@ const Index = () => {
     }
   ];
 
-  const cases = [
+  // Fallback cases (usado se não houver cases no banco)
+  const defaultCases = [
     {
       title: "Automação de Processos Financeiros",
-      client: "Grupo EMEC",
+      client_name: "Grupo EMEC",
       description: "Implementação de sistema automatizado para reembolso de despesas, saldos bancários integrados, Gestão de orçamentos e planejamento orçamentário, e aprovação de pagamentos reduzindo o tempo de gasto nestas atividades em 80% além de eliminarmos o uso de papeis e impressões.",
-      metrics: [
+      results: [
         { value: "80%", label: "Redução de tempo" },
         { value: "90%", label: "Aumento na precisão" },
         { value: "3 meses", label: "ROI positivo" }
       ],
-      image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop&crop=entropy&auto=format"
+      image_url: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=400&fit=crop&crop=entropy&auto=format"
     },
     {
       title: "Análise de Dados de Pessoas (People Analytics)",
-      client: "Ajinomoto",
+      client_name: "Ajinomoto",
       description: "Analises completas dos indicadores de pessoal: Headcount, Turnover, absenteismo, Horas Extras, Cotas de atendimento dentre outros.",
-      metrics: [
+      results: [
         { value: "70%", label: "Redução de tempo para compilar dados" },
         { value: "100%", label: "Democratização das informações" },
         { value: "Eficaz", label: "Planejamento baseado em dados reais" }
       ],
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop&crop=entropy&auto=format"
+      image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop&crop=entropy&auto=format"
     },
     {
       title: "Plataforma de Gestão Integrada",
-      client: "Agrovix",
+      client_name: "Agrovix",
       description: "Desenvolvimento de sistema integrado ao ERP para redução de custo com licenciamento",
-      metrics: [
+      results: [
         { value: "35%", label: "Aumento na produtividade" },
         { value: "50%", label: "Redução em erros operacionais" },
         { value: "20%", label: "Economia em licenciamento" }
       ],
-      image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop&crop=entropy&auto=format"
+      image_url: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop&crop=entropy&auto=format"
     }
   ];
 
-  const testimonials = [
+  // Fallback testimonials
+  const defaultTestimonials = [
     {
       name: "Patrick Silva",
       role: "Coordenador de TI",
@@ -95,6 +103,17 @@ const Index = () => {
       content: "Excelente suporte e soluções verdadeiramente personalizadas para nosso negócio."
     }
   ];
+
+  // Use dados do banco ou fallback
+  const cases = casesData && casesData.length > 0 ? casesData : defaultCases;
+  const services = productsData && productsData.length > 0 
+    ? productsData.map(p => ({
+        icon: BarChart3, // ícone padrão
+        title: p.name,
+        description: p.short_description || p.description
+      }))
+    : defaultServices;
+  const testimonials = defaultTestimonials; // Pode ser expandido para usar landing_sections
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,6 +140,14 @@ const Index = () => {
 
   // Filtra apenas posts publicados para a página pública
   const publishedPosts = blogPosts.filter(post => post.status === 'published').slice(0, 3);
+
+  // Helper para parsear results do case
+  const getCaseResults = (caseItem: any) => {
+    if (Array.isArray(caseItem.results)) {
+      return caseItem.results;
+    }
+    return [];
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -203,31 +230,39 @@ const Index = () => {
             <h2 className="text-4xl font-bold mb-4">Conheça alguns dos nossos casos de sucesso</h2>
           </div>
           <div className="space-y-16">
-            {cases.map((case_item, index) => (
-              <div key={index} className={`flex flex-col ${index % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-12 items-center`}>
-                <div className="flex-1">
-                  <img src={case_item.image} alt={case_item.title} className="w-full h-64 lg:h-80 object-cover rounded-xl shadow-lg" />
-                </div>
-                <div className="flex-1 space-y-6">
-                  <div>
-                    <Badge className="mb-2 bg-green-100 text-green-700">{case_item.client}</Badge>
-                    <h3 className="text-3xl font-bold mb-4">{case_item.title}</h3>
-                    <p className="text-gray-600 text-lg leading-relaxed">{case_item.description}</p>
+            {cases.map((case_item: any, index: number) => {
+              const results = getCaseResults(case_item);
+              const imageUrl = case_item.image_url || case_item.image || "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop";
+              const clientName = case_item.client_name || case_item.client || "Cliente";
+              
+              return (
+                <div key={case_item.id || index} className={`flex flex-col ${index % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-12 items-center`}>
+                  <div className="flex-1">
+                    <img src={imageUrl} alt={case_item.title} className="w-full h-64 lg:h-80 object-cover rounded-xl shadow-lg" />
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {case_item.metrics.map((metric, metricIndex) => (
-                      <div key={metricIndex} className="text-center p-4 bg-white rounded-lg shadow-sm">
-                        <div className="text-2xl font-bold text-blue-600 mb-1">{metric.value}</div>
-                        <div className="text-sm text-gray-600">{metric.label}</div>
+                  <div className="flex-1 space-y-6">
+                    <div>
+                      <Badge className="mb-2 bg-green-100 text-green-700">{clientName}</Badge>
+                      <h3 className="text-3xl font-bold mb-4">{case_item.title}</h3>
+                      <p className="text-gray-600 text-lg leading-relaxed">{case_item.description}</p>
+                    </div>
+                    {results.length > 0 && (
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {results.map((metric: any, metricIndex: number) => (
+                          <div key={metricIndex} className="text-center p-4 bg-white rounded-lg shadow-sm">
+                            <div className="text-2xl font-bold text-blue-600 mb-1">{metric.value}</div>
+                            <div className="text-sm text-gray-600">{metric.label}</div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
+                    <Button onClick={() => scrollToSection("contato")} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                      Fale Conosco
+                    </Button>
                   </div>
-                  <Button onClick={() => scrollToSection("contato")} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                    Fale Conosco
-                  </Button>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
