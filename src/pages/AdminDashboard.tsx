@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, LogOut, LayoutDashboard, FileText, Package, Briefcase, Wand2, Layers } from "lucide-react";
+import { Loader2, LogOut, LayoutDashboard, FileText, Package, Briefcase, Wand2, Layers, Users } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import CasesManager from "@/components/admin/CasesManager";
@@ -12,6 +12,7 @@ import ProductsManager from "@/components/admin/ProductsManager";
 import AIContentBuilder from "@/components/admin/AIContentBuilder";
 import BlogPostsManager from "@/components/admin/BlogPostsManager";
 import LandingSectionsManager from "@/components/admin/LandingSectionsManager";
+import UsersManager from "@/components/admin/UsersManager";
 
 const AdminDashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -166,7 +167,7 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="cases" className="flex items-center gap-2">
               <Briefcase className="w-4 h-4" />
               <span className="hidden sm:inline">Cases</span>
@@ -183,9 +184,13 @@ const AdminDashboard = () => {
               <Layers className="w-4 h-4" />
               <span className="hidden sm:inline">Seções</span>
             </TabsTrigger>
+            <TabsTrigger value="users" className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              <span className="hidden sm:inline">Usuários</span>
+            </TabsTrigger>
             <TabsTrigger value="ai-builder" className="flex items-center gap-2">
               <Wand2 className="w-4 h-4" />
-              <span className="hidden sm:inline">IA Builder</span>
+              <span className="hidden sm:inline">IA</span>
             </TabsTrigger>
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <LayoutDashboard className="w-4 h-4" />
@@ -207,6 +212,10 @@ const AdminDashboard = () => {
 
           <TabsContent value="sections">
             <LandingSectionsManager />
+          </TabsContent>
+
+          <TabsContent value="users">
+            <UsersManager />
           </TabsContent>
 
           <TabsContent value="ai-builder">
