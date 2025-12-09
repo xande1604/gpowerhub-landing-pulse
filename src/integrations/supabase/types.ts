@@ -226,6 +226,63 @@ export type Database = {
         }
         Relationships: []
       }
+      gamma_presentations: {
+        Row: {
+          additional_instructions: string | null
+          created_at: string
+          format: string | null
+          gamma_url: string
+          generation_id: string | null
+          id: string
+          input_text: string
+          language: string | null
+          num_cards: number | null
+          pdf_url: string | null
+          pptx_url: string | null
+          text_mode: string | null
+          title: string
+          tone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          additional_instructions?: string | null
+          created_at?: string
+          format?: string | null
+          gamma_url: string
+          generation_id?: string | null
+          id?: string
+          input_text: string
+          language?: string | null
+          num_cards?: number | null
+          pdf_url?: string | null
+          pptx_url?: string | null
+          text_mode?: string | null
+          title: string
+          tone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          additional_instructions?: string | null
+          created_at?: string
+          format?: string | null
+          gamma_url?: string
+          generation_id?: string | null
+          id?: string
+          input_text?: string
+          language?: string | null
+          num_cards?: number | null
+          pdf_url?: string | null
+          pptx_url?: string | null
+          text_mode?: string | null
+          title?: string
+          tone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       generated_contents: {
         Row: {
           content: string
@@ -286,6 +343,48 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_stories: {
+        Row: {
+          background_color: string | null
+          created_at: string | null
+          id: string
+          images: Json
+          metadata: Json | null
+          story_mode: string
+          style: string | null
+          title: string
+          topic: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          background_color?: string | null
+          created_at?: string | null
+          id?: string
+          images: Json
+          metadata?: Json | null
+          story_mode: string
+          style?: string | null
+          title: string
+          topic?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          background_color?: string | null
+          created_at?: string | null
+          id?: string
+          images?: Json
+          metadata?: Json | null
+          story_mode?: string
+          style?: string | null
+          title?: string
+          topic?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       image_transformations: {
         Row: {
           created_at: string
@@ -331,6 +430,36 @@ export type Database = {
           transformed_image_url?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      infographic_style_examples: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          example_image_url: string
+          id: string
+          style_label: string
+          style_value: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          example_image_url: string
+          id?: string
+          style_label: string
+          style_value: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          example_image_url?: string
+          id?: string
+          style_label?: string
+          style_value?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -761,15 +890,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "scheduled_posts_content_id_fkey"
-            columns: ["content_id"]
-            isOneToOne: false
-            referencedRelation: "generated_contents"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       subscribers: {
         Row: {
@@ -968,31 +1089,43 @@ export type Database = {
       user_profiles: {
         Row: {
           avatar_url: string | null
+          blog_token: string | null
+          blog_webhook_url: string | null
           created_at: string
           email: string | null
           full_name: string | null
           id: string
+          n8n_webhook_url: string | null
           photo_credits: number
+          signature: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           avatar_url?: string | null
+          blog_token?: string | null
+          blog_webhook_url?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id?: string
+          n8n_webhook_url?: string | null
           photo_credits?: number
+          signature?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           avatar_url?: string | null
+          blog_token?: string | null
+          blog_webhook_url?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id?: string
+          n8n_webhook_url?: string | null
           photo_credits?: number
+          signature?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -1015,6 +1148,45 @@ export type Database = {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_youtube_settings: {
+        Row: {
+          access_token: string | null
+          client_id: string
+          client_secret: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          refresh_token: string | null
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          client_id: string
+          client_secret: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          client_id?: string
+          client_secret?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
