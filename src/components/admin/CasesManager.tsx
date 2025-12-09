@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import { toast } from "sonner";
+import ImageUpload from "./ImageUpload";
 
 const CasesManager = () => {
   const { data: cases, isLoading } = useAdminCases();
@@ -151,23 +151,19 @@ const CasesManager = () => {
                 />
               </div>
 
-              <div>
-                <Label htmlFor="image_url">URL da Imagem</Label>
-                <Input
-                  id="image_url"
-                  type="url"
+              <div className="grid grid-cols-2 gap-4">
+                <ImageUpload
+                  label="Imagem do Case"
                   value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                  onChange={(url) => setFormData({ ...formData, image_url: url })}
+                  folder="cases"
                 />
-              </div>
 
-              <div>
-                <Label htmlFor="client_logo_url">URL do Logo do Cliente</Label>
-                <Input
-                  id="client_logo_url"
-                  type="url"
+                <ImageUpload
+                  label="Logo do Cliente"
                   value={formData.client_logo_url}
-                  onChange={(e) => setFormData({ ...formData, client_logo_url: e.target.value })}
+                  onChange={(url) => setFormData({ ...formData, client_logo_url: url })}
+                  folder="logos"
                 />
               </div>
 
@@ -232,11 +228,20 @@ const CasesManager = () => {
             <Card key={caseItem.id}>
               <CardHeader>
                 <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle>{caseItem.title}</CardTitle>
-                    {caseItem.client_name && (
-                      <p className="text-sm text-muted-foreground mt-1">{caseItem.client_name}</p>
+                  <div className="flex gap-4">
+                    {caseItem.image_url && (
+                      <img 
+                        src={caseItem.image_url} 
+                        alt={caseItem.title}
+                        className="w-16 h-16 object-cover rounded"
+                      />
                     )}
+                    <div>
+                      <CardTitle>{caseItem.title}</CardTitle>
+                      {caseItem.client_name && (
+                        <p className="text-sm text-muted-foreground mt-1">{caseItem.client_name}</p>
+                      )}
+                    </div>
                   </div>
                   <div className="flex gap-2">
                     <Badge variant={caseItem.is_published ? "default" : "secondary"}>

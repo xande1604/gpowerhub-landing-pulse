@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Edit, Trash2 } from "lucide-react";
+import ImageUpload from "./ImageUpload";
 
 const ProductsManager = () => {
   const { data: products, isLoading } = useAdminProducts();
@@ -171,15 +172,12 @@ const ProductsManager = () => {
                 />
               </div>
 
-              <div>
-                <Label htmlFor="image_url">URL da Imagem</Label>
-                <Input
-                  id="image_url"
-                  type="url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                />
-              </div>
+              <ImageUpload
+                label="Imagem do Produto"
+                value={formData.image_url}
+                onChange={(url) => setFormData({ ...formData, image_url: url })}
+                folder="products"
+              />
 
               <div>
                 <Label htmlFor="tags">Tags (separadas por vírgula)</Label>
@@ -231,11 +229,20 @@ const ProductsManager = () => {
             <Card key={product.id}>
               <CardHeader>
                 <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle>{product.name}</CardTitle>
-                    {product.short_description && (
-                      <p className="text-sm text-muted-foreground mt-1">{product.short_description}</p>
+                  <div className="flex gap-4">
+                    {product.image_url && (
+                      <img 
+                        src={product.image_url} 
+                        alt={product.name}
+                        className="w-16 h-16 object-cover rounded"
+                      />
                     )}
+                    <div>
+                      <CardTitle>{product.name}</CardTitle>
+                      {product.short_description && (
+                        <p className="text-sm text-muted-foreground mt-1">{product.short_description}</p>
+                      )}
+                    </div>
                   </div>
                   <div className="flex gap-2">
                     <Badge variant={product.is_published ? "default" : "secondary"}>
