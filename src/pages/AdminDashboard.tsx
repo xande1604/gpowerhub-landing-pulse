@@ -4,12 +4,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, LogOut } from "lucide-react";
+import { Loader2, LogOut, LayoutDashboard, FileText, Package, Briefcase, Wand2, Layers } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import CasesManager from "@/components/admin/CasesManager";
 import ProductsManager from "@/components/admin/ProductsManager";
 import AIContentBuilder from "@/components/admin/AIContentBuilder";
+import BlogPostsManager from "@/components/admin/BlogPostsManager";
+import LandingSectionsManager from "@/components/admin/LandingSectionsManager";
 
 const AdminDashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -164,10 +166,31 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="cases">Cases</TabsTrigger>
-            <TabsTrigger value="products">Produtos</TabsTrigger>
-            <TabsTrigger value="ai-builder">IA Builder</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="cases" className="flex items-center gap-2">
+              <Briefcase className="w-4 h-4" />
+              <span className="hidden sm:inline">Cases</span>
+            </TabsTrigger>
+            <TabsTrigger value="products" className="flex items-center gap-2">
+              <Package className="w-4 h-4" />
+              <span className="hidden sm:inline">Produtos</span>
+            </TabsTrigger>
+            <TabsTrigger value="blog" className="flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Blog</span>
+            </TabsTrigger>
+            <TabsTrigger value="sections" className="flex items-center gap-2">
+              <Layers className="w-4 h-4" />
+              <span className="hidden sm:inline">Seções</span>
+            </TabsTrigger>
+            <TabsTrigger value="ai-builder" className="flex items-center gap-2">
+              <Wand2 className="w-4 h-4" />
+              <span className="hidden sm:inline">IA Builder</span>
+            </TabsTrigger>
+            <TabsTrigger value="dashboard" className="flex items-center gap-2">
+              <LayoutDashboard className="w-4 h-4" />
+              <span className="hidden sm:inline">Dashboard</span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="cases">
@@ -178,8 +201,53 @@ const AdminDashboard = () => {
             <ProductsManager />
           </TabsContent>
 
+          <TabsContent value="blog">
+            <BlogPostsManager />
+          </TabsContent>
+
+          <TabsContent value="sections">
+            <LandingSectionsManager />
+          </TabsContent>
+
           <TabsContent value="ai-builder">
             <AIContentBuilder onContentSaved={(type) => setActiveTab(type)} />
+          </TabsContent>
+
+          <TabsContent value="dashboard">
+            <Card>
+              <CardHeader>
+                <CardTitle>Dashboard</CardTitle>
+                <CardDescription>Visão geral do sistema</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Cases</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">-</div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Produtos</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">-</div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Posts do Blog</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">-</div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>
