@@ -5,12 +5,20 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import SEO from "@/components/SEO";
 
 const Solutions = () => {
   const { data: products, isLoading: productsLoading } = useProducts();
   const { data: cases, isLoading: casesLoading } = useCases();
 
   return (
+    <>
+      <SEO
+        title="Soluções em Tecnologia para Empresas - Produtos e Cases"
+        description="Conheça os produtos e soluções da Gpowerhub: automação com IA, análise de dados, desenvolvimento de sistemas e integração de ERP para PMEs brasileiras."
+        canonical="/solucoes"
+        keywords="soluções tecnologia empresas, produtos tecnologia PME, automação empresarial, sistemas integrados, desenvolvimento software empresarial"
+      />
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative py-20 px-4 bg-gradient-to-b from-primary/5 to-background">
@@ -213,6 +221,7 @@ const Solutions = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

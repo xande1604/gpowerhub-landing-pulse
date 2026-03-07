@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, Calendar, User, ArrowLeft } from "lucide-react";
 import { useBlogPosts, BlogPost } from "@/hooks/useBlogPosts";
+import SEO from "@/components/SEO";
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -49,7 +50,39 @@ const BlogPostPage = () => {
     );
   }
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.excerpt || post.title,
+    "image": post.image_url || "https://gpowerhub.com.br/og-image.png",
+    "author": {
+      "@type": "Person",
+      "name": post.author,
+      "worksFor": { "@type": "Organization", "name": "Gpowerhub" }
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Gpowerhub",
+      "logo": { "@type": "ImageObject", "url": "https://gpowerhub.com.br/og-image.png" }
+    },
+    "datePublished": post.created_at,
+    "dateModified": post.created_at,
+    "mainEntityOfPage": { "@type": "WebPage", "@id": `https://gpowerhub.com.br/blog/${post.slug}` },
+    "keywords": post.tags?.join(", ") || "tecnologia, PME, automação"
+  };
+
   return (
+    <>
+      <SEO
+        title={post.title}
+        description={post.excerpt || `Leia o artigo "${post.title}" no blog da Gpowerhub. Conteúdo sobre tecnologia, automação e transformação digital para empresas.`}
+        canonical={`/blog/${post.slug}`}
+        ogImage={post.image_url || undefined}
+        ogType="article"
+        keywords={post.tags?.join(", ")}
+        schema={articleSchema}
+      />
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
@@ -73,16 +106,16 @@ const BlogPostPage = () => {
             {/* Header do Post */}
             <header className="mb-8">
               <div className="mb-4">
-                <Button 
-                  onClick={() => navigate('/')} 
-                  variant="ghost" 
+                <Button
+                  onClick={() => navigate('/blog')}
+                  variant="ghost"
                   className="text-blue-600 hover:text-blue-700 p-0 h-auto"
                 >
                   <ChevronLeft className="mr-1 w-4 h-4" />
                   Voltar ao blog
                 </Button>
               </div>
-              
+
               {post.tags && post.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-4">
                   {post.tags.map((tag, index) => (
@@ -92,15 +125,15 @@ const BlogPostPage = () => {
                   ))}
                 </div>
               )}
-              
+
               <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
                 {post.title}
               </h1>
-              
+
               {post.excerpt && (
                 <p className="text-xl text-gray-600 mb-6">{post.excerpt}</p>
               )}
-              
+
               <div className="flex items-center text-gray-600 mb-6">
                 <User className="w-4 h-4 mr-2" />
                 <span className="mr-4">{post.author}</span>
@@ -112,8 +145,8 @@ const BlogPostPage = () => {
             {/* Imagem destacada */}
             {post.image_url && (
               <div className="mb-8">
-                <img 
-                  src={post.image_url} 
+                <img
+                  src={post.image_url}
                   alt={post.title}
                   className="w-full h-64 md:h-96 object-cover rounded-xl shadow-lg"
                 />
@@ -122,7 +155,7 @@ const BlogPostPage = () => {
 
             {/* Conteúdo do post */}
             <div className="prose prose-lg max-w-none">
-              <div 
+              <div
                 className="text-gray-700 leading-relaxed"
                 style={{ whiteSpace: 'pre-wrap' }}
               >
@@ -133,14 +166,14 @@ const BlogPostPage = () => {
             {/* Footer do post */}
             <footer className="mt-12 pt-8 border-t border-gray-200">
               <div className="flex justify-between items-center">
-                <Button 
-                  onClick={() => navigate('/')} 
+                <Button
+                  onClick={() => navigate('/blog')}
                   variant="outline"
                 >
                   <ChevronLeft className="mr-2 w-4 h-4" />
                   Voltar ao blog
                 </Button>
-                
+
                 <div className="text-sm text-gray-500">
                   Publicado em {formatDate(post.created_at)}
                 </div>
@@ -150,6 +183,7 @@ const BlogPostPage = () => {
         </div>
       </main>
     </div>
+    </>
   );
 };
 

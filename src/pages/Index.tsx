@@ -9,6 +9,7 @@ import { useBlogPosts } from "@/hooks/useBlogPosts";
 import { useCases } from "@/hooks/useCases";
 import { useProducts } from "@/hooks/useProducts";
 import { useLandingSections } from "@/hooks/useLandingSections";
+import SEO from "@/components/SEO";
 
 const Index = () => {
   const { posts: blogPosts, loading: blogLoading } = useBlogPosts();
@@ -149,7 +150,83 @@ const Index = () => {
     return [];
   };
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Gpowerhub",
+    "url": "https://gpowerhub.com.br",
+    "logo": "https://gpowerhub.com.br/og-image.png",
+    "description": "Hub de desenvolvimento tecnológico para pequenas e médias empresas. Reduzimos custos e aumentamos performance com tecnologia estratégica.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Cariacica",
+      "addressRegion": "ES",
+      "addressCountry": "BR"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+55-27-99238-9066",
+      "email": "contato@gpowerhub.com.br",
+      "contactType": "customer service",
+      "availableLanguage": "Portuguese"
+    }
+  };
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Consultoria em Tecnologia para PMEs",
+    "provider": { "@type": "Organization", "name": "Gpowerhub" },
+    "areaServed": { "@type": "Country", "name": "Brasil" },
+    "description": "Soluções em análise de dados, automação com IA, desenvolvimento de sistemas e migração para pequenas e médias empresas.",
+    "offers": [
+      { "@type": "Offer", "name": "Análise de Dados" },
+      { "@type": "Offer", "name": "Automação com IA" },
+      { "@type": "Offer", "name": "Desenvolvimento de Sistemas" },
+      { "@type": "Offer", "name": "Migração de Sistemas" }
+    ]
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Como a Gpowerhub pode reduzir custos da minha empresa?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Implementamos automação de processos, análise de dados e sistemas integrados que eliminam retrabalho e reduzem despesas operacionais. Casos reais mostram até 80% de redução em tempo gasto em processos financeiros."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "A Gpowerhub atende pequenas e médias empresas?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sim. Somos especializados em transformação digital para PMEs, com soluções acessíveis e com ROI rápido, geralmente em menos de 3 meses."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Quais tecnologias a Gpowerhub utiliza?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Trabalhamos com automação de processos, inteligência artificial, análise de dados com Power BI e Python, desenvolvimento de sistemas web e mobile, e integração de ERP."
+        }
+      }
+    ]
+  };
+
   return (
+    <>
+      <SEO
+        title="Gpowerhub - Tecnologia Estratégica para Pequenas e Médias Empresas"
+        description="Reduza custos e aumente a performance da sua empresa com tecnologia. Automação com IA, análise de dados e desenvolvimento de sistemas para PMEs. ROI em até 3 meses."
+        canonical="/"
+        keywords="tecnologia para pequenas empresas, redução de custos com tecnologia, automação PME, análise de dados empresarial, consultoria tecnologia, transformação digital PME"
+        schema={[organizationSchema, serviceSchema, faqSchema]}
+      />
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
@@ -470,11 +547,11 @@ const Index = () => {
             </div>
             <div>
               <h3 className="font-semibold mb-4">Serviços</h3>
-              <div className="space-y-2 text-gray-400">
-                <div>Análise de Dados</div>
-                <div>Automação com IA</div>
-                <div>Desenvolvimento</div>
-                <div>Migração de Sistemas</div>
+              <div className="space-y-2">
+                <Link to="/analise-de-dados-empresarial" className="block text-gray-400 hover:text-white transition-colors">Análise de Dados</Link>
+                <Link to="/automacao-para-pequenas-empresas" className="block text-gray-400 hover:text-white transition-colors">Automação com IA</Link>
+                <Link to="/reducao-de-custos-com-tecnologia" className="block text-gray-400 hover:text-white transition-colors">Redução de Custos</Link>
+                <Link to="/transformacao-digital-pme" className="block text-gray-400 hover:text-white transition-colors">Transformação Digital</Link>
               </div>
             </div>
             <div>
@@ -493,6 +570,7 @@ const Index = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 
