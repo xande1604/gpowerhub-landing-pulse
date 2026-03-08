@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, Calendar, User, ArrowLeft } from "lucide-react";
 import { useBlogPosts, BlogPost } from "@/hooks/useBlogPosts";
 import SEO from "@/components/SEO";
+import Layout from "@/components/Layout";
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -26,27 +27,31 @@ const BlogPostPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white pt-20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">Carregando...</div>
+      <Layout>
+        <div className="pt-20 min-h-screen bg-white">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center">Carregando...</div>
+          </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-white pt-20">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Post não encontrado</h1>
-            <Button onClick={() => navigate('/')} variant="outline">
-              <ArrowLeft className="mr-2 w-4 h-4" />
-              Voltar ao início
-            </Button>
+      <Layout>
+        <div className="pt-20 min-h-screen bg-white">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center">
+              <h1 className="text-2xl font-bold mb-4">Post não encontrado</h1>
+              <Button onClick={() => navigate('/')} variant="outline">
+                <ArrowLeft className="mr-2 w-4 h-4" />
+                Voltar ao início
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 
@@ -83,106 +88,82 @@ const BlogPostPage = () => {
         keywords={post.tags?.join(", ")}
         schema={articleSchema}
       />
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
-        <nav className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Gpowerhub
-            </div>
-            <Button onClick={() => navigate('/')} variant="outline">
-              <ArrowLeft className="mr-2 w-4 h-4" />
-              Voltar
-            </Button>
-          </div>
-        </nav>
-      </header>
+      <Layout>
+        <div className="pt-20 pb-16 bg-white">
+          <div className="container mx-auto px-4">
+            <article className="max-w-4xl mx-auto">
+              {/* Header do Post */}
+              <header className="mb-8">
+                <div className="mb-4">
+                  <Button
+                    onClick={() => navigate('/blog')}
+                    variant="ghost"
+                    className="text-blue-600 hover:text-blue-700 p-0 h-auto"
+                  >
+                    <ChevronLeft className="mr-1 w-4 h-4" />
+                    Voltar ao blog
+                  </Button>
+                </div>
 
-      {/* Main Content */}
-      <main className="pt-20 pb-16">
-        <div className="container mx-auto px-4">
-          <article className="max-w-4xl mx-auto">
-            {/* Header do Post */}
-            <header className="mb-8">
-              <div className="mb-4">
-                <Button
-                  onClick={() => navigate('/blog')}
-                  variant="ghost"
-                  className="text-blue-600 hover:text-blue-700 p-0 h-auto"
-                >
-                  <ChevronLeft className="mr-1 w-4 h-4" />
-                  Voltar ao blog
-                </Button>
-              </div>
+                {post.tags && post.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {post.tags.map((tag, index) => (
+                      <Badge key={index} variant="secondary">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
 
-              {post.tags && post.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {post.tags.map((tag, index) => (
-                    <Badge key={index} variant="secondary">
-                      {tag}
-                    </Badge>
-                  ))}
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                  {post.title}
+                </h1>
+
+                {post.excerpt && (
+                  <p className="text-xl text-gray-600 mb-6">{post.excerpt}</p>
+                )}
+
+                <div className="flex items-center text-gray-600 mb-6">
+                  <User className="w-4 h-4 mr-2" />
+                  <span className="mr-4">{post.author}</span>
+                  <Calendar className="w-4 h-4 mr-2" />
+                  <span>{formatDate(post.created_at)}</span>
+                </div>
+              </header>
+
+              {/* Imagem destacada */}
+              {post.image_url && (
+                <div className="mb-8">
+                  <img
+                    src={post.image_url}
+                    alt={post.title}
+                    className="w-full h-64 md:h-96 object-cover rounded-xl shadow-lg"
+                  />
                 </div>
               )}
 
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-                {post.title}
-              </h1>
-
-              {post.excerpt && (
-                <p className="text-xl text-gray-600 mb-6">{post.excerpt}</p>
-              )}
-
-              <div className="flex items-center text-gray-600 mb-6">
-                <User className="w-4 h-4 mr-2" />
-                <span className="mr-4">{post.author}</span>
-                <Calendar className="w-4 h-4 mr-2" />
-                <span>{formatDate(post.created_at)}</span>
-              </div>
-            </header>
-
-            {/* Imagem destacada */}
-            {post.image_url && (
-              <div className="mb-8">
-                <img
-                  src={post.image_url}
-                  alt={post.title}
-                  className="w-full h-64 md:h-96 object-cover rounded-xl shadow-lg"
-                />
-              </div>
-            )}
-
-            {/* Conteúdo do post */}
-            <div className="prose prose-lg max-w-none">
+              {/* Conteúdo do post — renderiza HTML com segurança */}
               <div
-                className="text-gray-700 leading-relaxed"
-                style={{ whiteSpace: 'pre-wrap' }}
-              >
-                {post.content}
-              </div>
-            </div>
+                className="prose prose-lg max-w-none text-gray-700 leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: post.content }}
+              />
 
-            {/* Footer do post */}
-            <footer className="mt-12 pt-8 border-t border-gray-200">
-              <div className="flex justify-between items-center">
-                <Button
-                  onClick={() => navigate('/blog')}
-                  variant="outline"
-                >
-                  <ChevronLeft className="mr-2 w-4 h-4" />
-                  Voltar ao blog
-                </Button>
-
-                <div className="text-sm text-gray-500">
-                  Publicado em {formatDate(post.created_at)}
+              {/* Footer do post */}
+              <footer className="mt-12 pt-8 border-t border-gray-200">
+                <div className="flex justify-between items-center">
+                  <Button onClick={() => navigate('/blog')} variant="outline">
+                    <ChevronLeft className="mr-2 w-4 h-4" />
+                    Voltar ao blog
+                  </Button>
+                  <div className="text-sm text-gray-500">
+                    Publicado em {formatDate(post.created_at)}
+                  </div>
                 </div>
-              </div>
-            </footer>
-          </article>
+              </footer>
+            </article>
+          </div>
         </div>
-      </main>
-    </div>
+      </Layout>
     </>
   );
 };
