@@ -4,15 +4,17 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Zap, BarChart3, Code, ArrowUpRight, ChevronRight, CheckCircle } from "lucide-react";
 import SEO from "@/components/SEO";
+import Layout from "@/components/Layout";
 
 const TransformacaoDigital = () => {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "name": "Transformação Digital para Pequenas e Médias Empresas",
-    "provider": { "@type": "Organization", "name": "Gpowerhub", "url": "https://gpowerhub.com.br" },
-    "description": "Consultoria completa de transformação digital para PMEs. Da análise de maturidade digital até a implementação de sistemas e automações que mudam o negócio de verdade.",
-    "areaServed": { "@type": "Country", "name": "Brasil" }
+    name: "Transformação Digital para Pequenas e Médias Empresas",
+    provider: { "@type": "Organization", name: "Gpowerhub", url: "https://gpowerhub.com.br" },
+    description:
+      "Consultoria completa de transformação digital para PMEs. Da análise de maturidade digital até a implementação de sistemas e automações que mudam o negócio de verdade.",
+    areaServed: { "@type": "Country", name: "Brasil" },
   };
 
   const stages = [
@@ -20,88 +22,107 @@ const TransformacaoDigital = () => {
       icon: BarChart3,
       title: "Diagnóstico Digital",
       desc: "Avaliamos a maturidade digital da sua empresa: processos, sistemas, dados e equipe.",
-      badge: "Passo 1"
+      badge: "Passo 1",
     },
     {
       icon: Code,
       title: "Plano de Transformação",
       desc: "Criamos um roadmap personalizado com as iniciativas de maior impacto para o seu negócio.",
-      badge: "Passo 2"
+      badge: "Passo 2",
     },
     {
       icon: Zap,
-      title: "Implementação",
-      desc: "Executamos o plano com metodologia ágil: entregas rápidas, feedback constante e ajustes em tempo real.",
-      badge: "Passo 3"
+      title: "Implementação Gradual",
+      desc: "Executamos as mudanças de forma estruturada, sem parar sua operação.",
+      badge: "Passo 3",
     },
     {
       icon: ArrowUpRight,
-      title: "Crescimento Sustentável",
-      desc: "Monitoramos métricas e evoluímos continuamente para manter sua empresa à frente.",
-      badge: "Passo 4"
+      title: "Evolução Contínua",
+      desc: "Monitoramos resultados e evoluímos constantemente para manter sua empresa competitiva.",
+      badge: "Passo 4",
     },
   ];
 
   const pillars = [
-    "Digitalização de processos operacionais",
-    "Automação com Inteligência Artificial",
-    "Análise de dados e Business Intelligence",
-    "Integração de sistemas e ERPs",
-    "Desenvolvimento de plataformas digitais",
-    "Cultura data-driven e capacitação de equipe",
+    "Digitalização de processos manuais",
+    "Integração entre sistemas e dados",
+    "Dashboards e análise em tempo real",
+    "Automação com inteligência artificial",
+    "Cultura orientada a dados",
+    "Infraestrutura escalável na nuvem",
+  ];
+
+  const results = [
+    { value: "35%", label: "Aumento médio de produtividade" },
+    { value: "80%", label: "Redução de processos manuais" },
+    { value: "50%", label: "Menos erros operacionais" },
+  ];
+
+  const faqs = [
+    {
+      question: "O que é transformação digital na prática?",
+      answer:
+        "É a substituição de processos manuais e analógicos por soluções digitais — desde planilhas vira sistemas, aprovações por papel viram fluxos automáticos, e dados dispersos viram dashboards centralizados. O resultado é uma empresa mais ágil, eficiente e competitiva.",
+    },
+    {
+      question: "Por onde começa a transformação digital?",
+      answer:
+        "Começa com um diagnóstico honesto da maturidade digital atual. Mapeamos onde estão os maiores gargalos e qual tecnologia resolve com maior ROI. Não existe uma sequência única — depende da realidade de cada empresa.",
+    },
+    {
+      question: "Quanto tempo leva um processo de transformação digital?",
+      answer:
+        "As primeiras melhorias podem aparecer em semanas. A transformação completa é um processo contínuo de 6 a 24 meses, dependendo do tamanho e complexidade da empresa. Mas os resultados começam cedo.",
+    },
+    {
+      question: "Minha equipe vai conseguir usar as novas ferramentas?",
+      answer:
+        "Sim. Priorizamos soluções intuitivas e incluímos treinamento no processo. A adoção é gradual para que seu time se adapte sem sobrecarga.",
+    },
   ];
 
   return (
     <>
       <SEO
-        title="Transformação Digital para PMEs - Consultoria Completa"
-        description="Leve sua empresa para o próximo nível com transformação digital. Automatize processos, tome decisões baseadas em dados e cresça com tecnologia. Gpowerhub: especialistas em PMEs brasileiras."
+        title="Transformação Digital para Pequenas e Médias Empresas"
+        description="Consultoria completa em transformação digital para PMEs. Digitalize processos, integre sistemas e tome decisões com dados. ROI comprovado em até 3 meses. Fale com a Gpowerhub."
         canonical="/transformacao-digital-pme"
-        keywords="transformação digital PME, consultoria transformação digital, digitalização empresas, como digitalizar empresa, maturidade digital, estratégia digital empresas"
+        keywords="transformação digital PME, digitalização de processos, consultoria transformação digital, maturidade digital, sistemas integrados, tecnologia para empresas"
         schema={schema}
       />
-      <div className="min-h-screen bg-white">
-        <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 z-50">
-          <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Gpowerhub
-            </Link>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link to="/#servicos" className="text-gray-600 hover:text-blue-600">Serviços</Link>
-              <Link to="/#cases" className="text-gray-600 hover:text-blue-600">Cases</Link>
-              <Link to="/blog" className="text-gray-600 hover:text-blue-600">Blog</Link>
-            </div>
-            <Button asChild className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              <Link to="/#contato">Fale Conosco</Link>
-            </Button>
-          </nav>
-        </header>
-
-        <main className="pt-20">
+      <Layout>
+        <div className="pt-20">
           {/* Hero */}
           <section className="bg-gradient-to-br from-purple-50 via-white to-blue-50 py-24">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto text-center">
-                <Badge className="mb-4 bg-purple-100 text-purple-700">Transformação Digital</Badge>
+                <Badge className="mb-4 bg-purple-100 text-purple-700 border-0">
+                  Transformação Digital
+                </Badge>
                 <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                  Transformação digital{" "}
+                  Transforme sua empresa com{" "}
                   <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                    acessível para sua PME
+                    tecnologia estratégica
                   </span>
                 </h1>
                 <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto">
-                  Transformação digital não é só para grandes empresas. Com a estratégia certa,
-                  sua PME pode competir com gigantes usando tecnologia inteligente e acessível.
+                  A transformação digital não é sobre comprar tecnologia. É sobre usar a tecnologia
+                  certa para resolver os problemas certos e escalar o seu negócio com eficiência.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button asChild size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                  >
                     <Link to="/#contato">
-                      Iniciar minha transformação
+                      Quero transformar minha empresa
                       <ChevronRight className="ml-2 w-4 h-4" />
                     </Link>
                   </Button>
                   <Button asChild variant="outline" size="lg">
-                    <Link to="/#cases">Casos de sucesso</Link>
+                    <Link to="/#cases">Ver resultados reais</Link>
                   </Button>
                 </div>
               </div>
@@ -112,21 +133,30 @@ const TransformacaoDigital = () => {
           <section className="py-20 bg-white">
             <div className="container mx-auto px-4">
               <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold mb-4">Nossa metodologia de transformação</h2>
-                <p className="text-lg text-gray-600">Do diagnóstico à implementação, sempre ao seu lado</p>
+                <h2 className="text-4xl font-bold mb-4">Como fazemos a transformação digital</h2>
+                <p className="text-lg text-gray-600">
+                  Um processo estruturado e orientado a resultados reais
+                </p>
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {stages.map((s, i) => (
-                  <Card key={i} className="group hover:shadow-lg transition-all hover:-translate-y-2">
+                {stages.map((stage, i) => (
+                  <Card
+                    key={i}
+                    className="text-center hover:shadow-lg transition-shadow border-gray-100"
+                  >
                     <CardHeader>
-                      <Badge className="w-fit mb-3 bg-purple-100 text-purple-700">{s.badge}</Badge>
-                      <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                        <s.icon className="w-6 h-6 text-white" />
+                      <Badge className="mb-2 mx-auto bg-purple-100 text-purple-700 border-0 w-fit">
+                        {stage.badge}
+                      </Badge>
+                      <div className="w-14 h-14 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-2">
+                        <stage.icon className="w-7 h-7 text-white" />
                       </div>
-                      <CardTitle>{s.title}</CardTitle>
+                      <CardTitle className="text-xl">{stage.title}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <CardDescription className="text-gray-600">{s.desc}</CardDescription>
+                      <CardDescription className="text-gray-600 leading-relaxed">
+                        {stage.desc}
+                      </CardDescription>
                     </CardContent>
                   </Card>
                 ))}
@@ -139,14 +169,21 @@ const TransformacaoDigital = () => {
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto">
                 <div className="text-center mb-16">
-                  <h2 className="text-4xl font-bold mb-4">Os pilares da transformação digital</h2>
-                  <p className="text-lg text-gray-600">Cada pilar trabalha em conjunto para transformar o negócio de forma completa</p>
+                  <Badge className="mb-4 bg-blue-100 text-blue-700 border-0">
+                    Pilares da Transformação
+                  </Badge>
+                  <h2 className="text-4xl font-bold mb-4">
+                    O que transformamos na sua empresa
+                  </h2>
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   {pillars.map((pillar, i) => (
-                    <div key={i} className="flex items-center gap-3 bg-white p-5 rounded-xl shadow-sm">
-                      <CheckCircle className="w-6 h-6 text-purple-500 flex-shrink-0" />
-                      <span className="font-medium text-gray-800">{pillar}</span>
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 bg-white p-4 rounded-xl shadow-sm border border-gray-100"
+                    >
+                      <CheckCircle className="w-5 h-5 text-purple-500 flex-shrink-0" />
+                      <span className="text-gray-700 font-medium">{pillar}</span>
                     </div>
                   ))}
                 </div>
@@ -154,60 +191,71 @@ const TransformacaoDigital = () => {
             </div>
           </section>
 
-          {/* Case */}
-          <section className="py-20 bg-white">
+          {/* Results */}
+          <section className="py-16 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
             <div className="container mx-auto px-4">
-              <div className="max-w-4xl mx-auto">
-                <div className="text-center mb-12">
-                  <h2 className="text-4xl font-bold mb-4">Resultados reais de transformação digital</h2>
-                </div>
-                <div className="grid md:grid-cols-3 gap-6">
-                  {[
-                    { company: "Grupo EMEC", result: "80%", desc: "menos tempo em processos financeiros" },
-                    { company: "Ajinomoto", result: "70%", desc: "redução no tempo de compilar dados de RH" },
-                    { company: "Agrovix", result: "35%", desc: "aumento na produtividade operacional" },
-                  ].map((c, i) => (
-                    <Card key={i} className="text-center hover:shadow-lg transition-shadow">
-                      <CardContent className="p-8">
-                        <Badge className="mb-4 bg-blue-100 text-blue-700">{c.company}</Badge>
-                        <div className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-3">
-                          {c.result}
-                        </div>
-                        <p className="text-gray-600">{c.desc}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+              <div className="text-center mb-10">
+                <h2 className="text-3xl font-bold">Resultados dos nossos clientes</h2>
+              </div>
+              <div className="grid md:grid-cols-3 gap-8 text-center">
+                {results.map((r, i) => (
+                  <div key={i}>
+                    <div className="text-5xl font-bold mb-2">{r.value}</div>
+                    <div className="text-white/80">{r.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* FAQ */}
+          <section className="py-20 bg-white">
+            <div className="container mx-auto px-4 max-w-3xl">
+              <div className="text-center mb-12">
+                <Badge className="mb-4 bg-purple-100 text-purple-700 border-0">
+                  Perguntas Frequentes
+                </Badge>
+                <h2 className="text-3xl font-bold">Dúvidas sobre transformação digital</h2>
+              </div>
+              <div className="space-y-4">
+                {faqs.map((faq, i) => (
+                  <Card key={i} className="border-gray-100">
+                    <CardHeader>
+                      <CardTitle className="text-lg font-semibold">{faq.question}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
           </section>
 
           {/* CTA */}
-          <section className="py-20 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+          <section className="py-20 bg-gray-50">
             <div className="container mx-auto px-4 text-center">
-              <h2 className="text-4xl font-bold mb-4">Sua empresa merece tecnologia de verdade</h2>
-              <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                Vamos conversar sobre onde sua empresa está e onde quer chegar. O diagnóstico é gratuito.
+              <h2 className="text-4xl font-bold mb-4">
+                Pronto para iniciar sua transformação digital?
+              </h2>
+              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                Agende uma conversa gratuita e descubra o que a tecnologia certa pode fazer pelo
+                seu negócio.
               </p>
-              <Button asChild size="lg" variant="secondary">
+              <Button
+                asChild
+                size="lg"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+              >
                 <Link to="/#contato">
-                  Quero transformar minha empresa
+                  Começar transformação digital
                   <ChevronRight className="ml-2 w-4 h-4" />
                 </Link>
               </Button>
             </div>
           </section>
-        </main>
-
-        <footer className="bg-gray-900 text-white py-8">
-          <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-            <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4 md:mb-0">
-              Gpowerhub
-            </Link>
-            <div className="text-gray-400 text-sm">© 2025 Gpowerhub. Todos os direitos reservados.</div>
-          </div>
-        </footer>
-      </div>
+        </div>
+      </Layout>
     </>
   );
 };
